@@ -5,33 +5,48 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Link from 'next/link';
 
 const LoginForm = () => {
+  // State for the email and password inputs
   const [values, setValues] = useState({ email: '', password: '' });
+  // State for the password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
+  // State for the email validation error
   const [emailError, setEmailError] = useState(false);
 
+  // Handler for the email and password input changes
   const handleChange = (prop) => (event) => {
+    // Update the values state with the new input
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  // Handler for the password visibility toggle click
   const handleClickShowPassword = () => {
+    // Toggle the showPassword state
     setShowPassword(!showPassword);
   };
 
+  // Handler for the password visibility toggle mouse down event
   const handleMouseDownPassword = (event) => {
+    // Prevent the default mouse down event
     event.preventDefault();
   };
 
+  // Handler for the email input blur event
   const handleEmailBlur = () => {
+    // Regular expression for email validation
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    // Set the email error state based on the email validation
     setEmailError(!emailRegex.test(values.email));
   };
 
+  // Handler for the form submission
   const handleSubmit = (event) => {
+    // Prevent the default form submission
     event.preventDefault();
-    // Submit form
+    // Here you can add your form submission logic
   };
 
   return (
+    // Form component
     <Box
       component="form"
       onSubmit={handleSubmit}
@@ -44,6 +59,7 @@ const LoginForm = () => {
         gap: 2, // for margin between items
       }}
     >
+      // Email input field
       <TextField
         label="Email"
         type="email"
@@ -55,6 +71,7 @@ const LoginForm = () => {
         error={emailError}
         helperText={emailError ? 'Please enter a valid email address' : ''}
       />
+      // Password input field with visibility toggle
       <TextField
         label="Password"
         type={showPassword ? 'text' : 'password'}
@@ -75,9 +92,11 @@ const LoginForm = () => {
           ),
         }}
       />
+      // Login button
       <Button type="submit" variant="contained" color="primary" fullWidth disabled={emailError}>
         Login
       </Button>
+      // Forgot password link
       <Link href="/forgot-password" passHref>
         <Button color="secondary">Forgot password?</Button>
       </Link>
