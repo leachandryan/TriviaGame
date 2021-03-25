@@ -59,7 +59,6 @@ const LoginForm = () => {
         gap: 2, // for margin between items
       }}
     >
-      // Email input field
       <TextField
         label="Email"
         type="email"
@@ -71,7 +70,6 @@ const LoginForm = () => {
         error={emailError}
         helperText={emailError ? 'Please enter a valid email address' : ''}
       />
-      // Password input field with visibility toggle
       <TextField
         label="Password"
         type={showPassword ? 'text' : 'password'}
@@ -92,11 +90,9 @@ const LoginForm = () => {
           ),
         }}
       />
-      // Login button
       <Button type="submit" variant="contained" color="primary" fullWidth disabled={emailError}>
         Login
       </Button>
-      // Forgot password link
       <Link href="/forgot-password" passHref>
         <Button color="secondary">Forgot password?</Button>
       </Link>
