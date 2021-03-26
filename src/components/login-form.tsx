@@ -39,10 +39,50 @@ const LoginForm = () => {
   };
 
   // Handler for the form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     // Prevent the default form submission
     event.preventDefault();
-    // Here you can add your form submission logic
+
+    const apiUrl = 'http://127.0.0.1:8787/api/auth/login'; // Replace with your API endpoint
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
+
+      if (!response.ok) {
+        // Handle error
+        console.error('Failed to login:', response.statusText);
+        alert('Login Failed');
+        return;
+      }
+
+      // Assuming the API returns a JSON response
+      const responseData = await response.json();
+      console.log('Login successful:', responseData);
+      alert('Login Successful');
+
+      const { token, expires_at } = responseData.result.session;
+
+      // Set the session information in local storage
+      const sessionData = {
+        token: token,
+        email: values.email,
+        expires_at: expires_at
+      };
+
+      localStorage.setItem('session', JSON.stringify(sessionData));
+      // You can also perform additional actions after successful login
+    } catch (error) {
+      console.error('Error during login:', error.message);
+    }
   };
 
   return (

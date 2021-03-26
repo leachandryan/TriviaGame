@@ -42,11 +42,67 @@ const CreateAccountForm = () => {
     setErrors({ ...errors, confirmPassword: values.password !== values.confirmPassword });
   };
 
-  // Handler for the form submission
-  const handleSubmit = (event) => {
-    // Prevent the default form submission
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Here you can add your form submission logic
+  
+    if (isLoading) {
+      return;
+    }
+  
+    setIsLoading(true);
+  
+    // Check if passwords match
+    if (values.password !== values.confirmPassword) {
+      setPasswordMismatch(true);
+      setIsLoading(false);
+      return;
+    }
+  
+    // Log the payload before sending the request
+    console.log("Request Payload:", {
+      email: values.email,
+      password: values.password,
+    });
+  
+    // Assuming 'http://127.0.0.1:8787/api/auth/register' is the endpoint for the external API
+    const apiUrl = 'http://127.0.0.1:8787/api/auth/register';
+  
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
+  
+      if (!response.ok) {
+        // Handle API error
+        if (response.status === 400) {
+          alert('The username is already taken');
+        } else {
+          console.error('Failed to create account:', response.statusText);
+        }
+        setIsLoading(false);
+        return;
+      }
+  
+      // Assuming the API returns a JSON response
+      const responseData = await response.json();
+      console.log('Account created successfully:', responseData);
+      alert('Account Created');
+      window.location.href = '/login';
+  
+    } catch (error) {
+      // Handle fetch error
+      console.error('Error during account creation:', error.message);
+      setIsLoading(false);
+    }
   };
 
   return (
